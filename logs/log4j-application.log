@@ -1,0 +1,5 @@
+2018-02-26 16:16:59 DEBUG Main:11 - This is debug : test
+2018-02-26 16:16:59 INFO  Main:15 - This is info : test
+2018-02-26 16:16:59 WARN  Main:18 - This is warn : test
+2018-02-26 16:16:59 ERROR Main:19 - This is error : test
+2018-02-26 16:16:59 FATAL Main:20 - This is fatal : test
