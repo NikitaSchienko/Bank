@@ -1,21 +1,23 @@
-public class RequestInput
+package requests;
+
+public class Request
 {
-    private int id;
+    private Long id;
     private int type;
     private int code;
 
-    public RequestInput(int id, int type, int code)
+    public Request(Long id, int type, int code)
     {
         this.id = id;
         this.type = type;
         this.code = code;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -1,3 +1,5 @@
+package requests;
+
 public class Constants
 {
     public static final int TRANSFER_MONEY = 1000;
