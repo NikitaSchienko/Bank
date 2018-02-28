@@ -7,6 +7,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
+import java.math.BigInteger;
 
 public class Main {
 
@@ -31,16 +32,19 @@ public class Main {
     public static void main(String[] args)
     {
         Card card1 = new Card();
-        card1.setNumber((long) 421572954);
+        card1.setId(new BigInteger("4215729546565"));
         card1.setCode(542);
         card1.setMoney(50.50);
 
         Card card2 = new Card();
-        card2.setNumber((long) 5454454);
+        card2.setId(new BigInteger("55456456454454"));
         card2.setCode(1112);
         card2.setMoney(50.50);
 
         OperationCardDAO operationCardDAO = new OperationCardDAO();
+
+        operationCardDAO.insert(card2);
+        operationCardDAO.insert(card1);
 
 
 

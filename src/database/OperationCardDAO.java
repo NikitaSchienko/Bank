@@ -1,11 +1,13 @@
 package database;
 
+import java.math.BigInteger;
+import java.util.HashMap;
 import java.util.Map;
 
 public class OperationCardDAO
 {
     private FileCardDAO fileCardDAO;
-    private Map<Long, Card> mapCards;
+    private Map<BigInteger, Card> mapCards = new HashMap<BigInteger, Card>();
 
     public OperationCardDAO()
     {
@@ -15,7 +17,7 @@ public class OperationCardDAO
 
     public void insert(Card newCard)
     {
-        mapCards.put(newCard.getNumber(),newCard);
+        mapCards.put(newCard.getId(),newCard);
         fileCardDAO.saveCards();
     }
 

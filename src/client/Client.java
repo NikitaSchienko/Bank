@@ -1,8 +1,9 @@
 package client;
 import com.alibaba.fastjson.JSON;
 import requests.Constants;
-import requests.Request;
+import requests.RequestScore;
 
+import java.math.BigInteger;
 import java.net.*;
 import java.io.*;
 
@@ -29,7 +30,7 @@ public class Client
             DataOutputStream out = new DataOutputStream(sout);
 
 
-            Request request = new Request((long) 5454451, Constants.REQUEST_MONEY, 1245);
+            RequestScore request = new RequestScore(new BigInteger("4215729546565"), 5421, Constants.REQUEST_MONEY);
             String jsonRequest = JSON.toJSONString(request);
 
 

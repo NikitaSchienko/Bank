@@ -1,28 +1,30 @@
 package server;
 
 import com.alibaba.fastjson.JSON;
-import com.sun.corba.se.spi.legacy.interceptor.RequestInfoExt;
-import database.Card;
-import jdk.nashorn.internal.ir.RuntimeNode;
-import requests.Request;
+import com.alibaba.fastjson.JSONObject;
+import com.sun.org.apache.xpath.internal.SourceTree;
+import database.SynchonizedMap;
+import processing.ProcessingRequest;
+import processing.ProcessingRequestScore;
+import requests.RequestScore;
+import response.Response;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.ServerSocket;
+import java.math.BigInteger;
 import java.net.Socket;
-import java.util.Map;
 
 public class ServerThread implements Runnable
 {
 
     private Socket socket;
-    private Map<Long, Card> cardMap;
+    private SynchonizedMap synchonizedMap;
 
-    public ServerThread(Socket socket, Map<Long,Card> cardMap)
+    public ServerThread(Socket socket, SynchonizedMap synchonizedMap)
     {
-        this.cardMap = cardMap;
+        this.synchonizedMap = synchonizedMap;
         this.socket = socket;
     }
 
@@ -31,7 +33,6 @@ public class ServerThread implements Runnable
         System.out.println(socket.toString() + " - Сессия запущена");
         try
         {
-
             InputStream sin = socket.getInputStream();
             OutputStream sout = socket.getOutputStream();
 
@@ -46,53 +47,42 @@ public class ServerThread implements Runnable
                 jsonLine = in.readUTF();
 
                 System.out.println("Клиент прислал строку:  " + jsonLine);
-                Request request = JSON.parseObject(jsonLine, Request.class);
+                JSONObject requestJSON = JSON.parseObject(jsonLine);
+                Response response = identifyTypeRequest(requestJSON);
 
-                String response = checkAccess(request)? "Доступ разрешен": "Запрет на доступ";
-
-                out.writeUTF(response);
+                out.writeUTF(JSON.toJSONString(response));
                 out.flush();
             }
         }
         catch (Exception e)
         {
+            System.out.println(e.getStackTrace());
             System.out.println(socket.toString() + " - Сессия завершена");
         }
     }
 
-    private boolean checkAccess(Request request)
+
+    private Response identifyTypeRequest(JSONObject requestJSON)
     {
-        Boolean access = false;
+        System.out.println("Обработка типа");
+        ProcessingRequest processingRequest = null;
 
-        if(cardMap.containsKey(request.getId()))
-        {
-            Card card = cardMap.get(request.getId());
-            if(card.getCode() == request.getCode())
-            {
-                access = true;
-            }
-        }
-        else
-        {
-            //throw new NullPointerException("Такой карты не существует!");
-        }
-        return access;
-    }
+        int type = requestJSON.getInteger("type");
 
-    private String checkRequest(int numberRequest)
-    {
-        String response;
-
-        switch (numberRequest)
+        switch (type)
         {
             case 1001:
             {
-                response = ""
+
             }
             break;
             case 1002:
             {
-
+                System.out.println("Тип запроса - проверка счета");
+                BigInteger id = requestJSON.getBigInteger("id");
+                int code = requestJSON.getInteger("code");
+                RequestScore requestScore = new RequestScore(id,code,type);
+                processingRequest = new ProcessingRequestScore(requestScore, synchonizedMap);
             }
             break;
             case 1003:
@@ -107,9 +97,10 @@ public class ServerThread implements Runnable
             break;
             default:
             {
-
+                throw new NullPointerException("Неизвестная операция");
             }
-
         }
+        return processingRequest.createResponse();
     }
+
 }

@@ -2,29 +2,32 @@ package database;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import java.math.BigInteger;
 
 
 public class Card
 {
-    private Long number;
+    private BigInteger id;
     private Integer code;
     private Double money;
 
-//    public Card(Long number, Integer code, Double money)
-//    {
-//        this.number = number;
+
+
+//    public Card(BigInteger id, Integer code, Double money) {
+//        this.id = id;
 //        this.code = code;
 //        this.money = money;
 //    }
 
-    public Long getNumber()
+
+    public BigInteger getId()
     {
-        return number;
+        return id;
     }
 
-    public void setNumber(Long number)
+    public void setId(BigInteger id)
     {
-        this.number = number;
+        this.id = id;
     }
 
     public Integer getCode()
@@ -45,14 +48,5 @@ public class Card
     public void setMoney(Double money)
     {
         this.money = money;
-    }
-
-    @Override
-    public String toString() {
-        return "Card{" +
-                "number=" + number +
-                ", code=" + code +
-                ", money=" + money +
-                '}';
     }
 }

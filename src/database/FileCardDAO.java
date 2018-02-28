@@ -5,6 +5,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,15 +13,15 @@ public class FileCardDAO
 {
     private final static String PATH = "C:\\Users\\nish0817\\Desktop\\Портфолио\\Bank\\file\\cards.xml";
 
-    private Map<Long, Card> mapCards;
+    private Map<BigInteger, Card> mapCards;
 
     public FileCardDAO()
     {
-         mapCards = new HashMap<Long, Card>();
+         mapCards = new HashMap<BigInteger, Card>();
          loadCards();
     }
 
-    public Map<Long, Card> getMapCards()
+    public Map<BigInteger, Card> getMapCards()
     {
         return mapCards;
     }
