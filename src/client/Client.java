@@ -1,6 +1,7 @@
 package client;
 import com.alibaba.fastjson.JSON;
 import requests.Constants;
+import requests.RequestForTransaction;
 import requests.RequestScore;
 
 import java.math.BigInteger;
@@ -11,7 +12,7 @@ public class Client
 {
     public static void main(String[] ar)
     {
-        int serverPort = 6666; // здесь обязательно нужно указать порт к которому привязывается сервер.
+        int serverPort = 6665; // здесь обязательно нужно указать порт к которому привязывается сервер.
         //String address = "127.0.0.1"; // это IP-адрес компьютера, где исполняется наша серверная программа.
         // Здесь указан адрес того самого компьютера где будет исполняться и клиент.
 
@@ -30,7 +31,14 @@ public class Client
             DataOutputStream out = new DataOutputStream(sout);
 
 
-            RequestScore request = new RequestScore(new BigInteger("4215729546565"), 5421, Constants.REQUEST_MONEY);
+            //RequestScore request = new RequestScore(new BigInteger("4215729546565"), 5421, Constants.GET_MONEY);
+            RequestForTransaction request = new RequestForTransaction(
+                    new BigInteger("4215729546565"),
+                    5421,
+                    Constants.TRANSFER_MONEY,
+                    10,
+                    new BigInteger("55456456454454"));
+
             String jsonRequest = JSON.toJSONString(request);
 
 

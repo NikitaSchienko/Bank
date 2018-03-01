@@ -1,15 +1,18 @@
 package database;
 
+import java.io.FileInputStream;
 import java.math.BigInteger;
 import java.util.Map;
 
-public class SynchonizedMap
+public class SynchronizedMap
 {
     private Map<BigInteger,Card> mapCard;
+    private OperationCardDAO operationCardDAO;
 
-    public SynchonizedMap(Map<BigInteger, Card> mapCard)
+    public SynchronizedMap()
     {
-        this.mapCard = mapCard;
+        operationCardDAO = new OperationCardDAO();
+        mapCard = operationCardDAO.getMapCards();
     }
 
     public synchronized Map<BigInteger, Card> getMapCard()
@@ -17,14 +20,10 @@ public class SynchonizedMap
         return mapCard;
     }
 
-    public synchronized void setMapCard(Map<BigInteger, Card> mapCard)
-    {
-        this.mapCard = mapCard;
-    }
-
     public synchronized void remoteCardInMap(BigInteger id)
     {
         mapCard.remove(id);
+        operationCardDAO.delete(id);
     }
 
     public synchronized boolean containsCard(BigInteger id)
@@ -37,9 +36,10 @@ public class SynchonizedMap
         return mapCard.get(id);
     }
 
-    public synchronized void putCard(Card card)
+    public synchronized void putCard(BigInteger id, Card card)
     {
-        mapCard.put(card.getId(),card);
+        mapCard.put(id,card);
+        operationCardDAO.insert(card);
     }
 
 }

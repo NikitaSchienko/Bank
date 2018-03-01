@@ -2,14 +2,14 @@ package requests;
 
 import java.math.BigInteger;
 
-public class RequestForMoney
+public class RequestForTakeMoney
 {
     private BigInteger id;
     private int code;
     private int type;
     private double money;
 
-    public RequestForMoney(BigInteger id, int code, int type, double money)
+    public RequestForTakeMoney(BigInteger id, int code, int type, double money)
     {
         this.id = id;
         this.code = code;

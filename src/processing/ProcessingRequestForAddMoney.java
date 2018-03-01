@@ -3,15 +3,16 @@ package processing;
 import database.Card;
 import database.SynchronizedMap;
 import requests.Constants;
-import requests.RequestScore;
+import requests.RequestForAddMoney;
 import response.Response;
 
-public class ProcessingRequestScore implements ProcessingRequest
+public class ProcessingRequestForAddMoney implements ProcessingRequest
 {
-    private RequestScore request;
+
+    private RequestForAddMoney request;
     private SynchronizedMap synchronizedMap;
 
-    public ProcessingRequestScore(RequestScore request, SynchronizedMap synchronizedMap)
+    public ProcessingRequestForAddMoney(RequestForAddMoney request, SynchronizedMap synchronizedMap)
     {
         this.request = request;
         this.synchronizedMap = synchronizedMap;
@@ -23,21 +24,21 @@ public class ProcessingRequestScore implements ProcessingRequest
 
         if(checkAccess(request))
         {
-            Card card = synchronizedMap.getCard(request.getId());
+            transaction(request);
             response.setCodeException(Constants.CORRECT_CODE);
-            response.setId(request.getId());
-            response.setMoney(card.getMoney());
-            response.setType(request.getType());
+            response.setMoney(request.getMoney());
         }
         else
         {
             response.setCodeException(Constants.INCORRECT_CODE);
         }
 
+        response.setType(request.getType());
+
         return response;
     }
 
-    private boolean checkAccess(RequestScore request)
+    private boolean checkAccess(RequestForAddMoney request)
     {
         Boolean access = false;
 
@@ -57,4 +58,14 @@ public class ProcessingRequestScore implements ProcessingRequest
     }
 
 
+
+    private void transaction(RequestForAddMoney request)
+    {
+        Card myCard = synchronizedMap.getCard(request.getId());
+
+        double myMoney = myCard.getMoney() + request.getMoney();
+
+        synchronizedMap.getCard(myCard.getId()).setMoney(myMoney);
+
+    }
 }

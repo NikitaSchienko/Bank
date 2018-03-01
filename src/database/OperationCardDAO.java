@@ -1,18 +1,22 @@
 package database;
 
 import java.math.BigInteger;
-import java.util.HashMap;
 import java.util.Map;
 
 public class OperationCardDAO
 {
     private FileCardDAO fileCardDAO;
-    private Map<BigInteger, Card> mapCards = new HashMap<BigInteger, Card>();
+    private Map<BigInteger,Card> mapCards;
 
     public OperationCardDAO()
     {
         fileCardDAO = new FileCardDAO();
         mapCards = fileCardDAO.getMapCards();
+    }
+
+    public Map<BigInteger,Card> getMapCards()
+    {
+        return mapCards;
     }
 
     public void insert(Card newCard)
@@ -21,9 +25,9 @@ public class OperationCardDAO
         fileCardDAO.saveCards();
     }
 
-    public void delete(Long id)
+    public void delete(BigInteger id)
     {
-        mapCards.remove(mapCards.get(id));
+        mapCards.remove(id);
         fileCardDAO.saveCards();
     }
 }

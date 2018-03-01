@@ -1,20 +1,20 @@
 package processing;
 
 import database.Card;
-import database.SynchonizedMap;
+import database.SynchronizedMap;
 import requests.Constants;
-import requests.RequestForMoney;
+import requests.RequestForTakeMoney;
 import response.Response;
 
-public class ProcessingRequestForMoney
+public class ProcessingRequestForTakeMoney implements ProcessingRequest
 {
-    private RequestForMoney request;
-    private SynchonizedMap synchonizedMap;
+    private RequestForTakeMoney request;
+    private SynchronizedMap synchronizedMap;
 
-    public ProcessingRequestForMoney(RequestForMoney request, SynchonizedMap synchonizedMap)
+    public ProcessingRequestForTakeMoney(RequestForTakeMoney request, SynchronizedMap synchronizedMap)
     {
         this.request = request;
-        this.synchonizedMap = synchonizedMap;
+        this.synchronizedMap = synchronizedMap;
     }
 
     public Response createResponse()
@@ -45,13 +45,13 @@ public class ProcessingRequestForMoney
         return response;
     }
 
-    private boolean checkAccess(RequestForMoney request)
+    private boolean checkAccess(RequestForTakeMoney request)
     {
         Boolean access = false;
 
-        if(synchonizedMap.containsCard(request.getId()))
+        if(synchronizedMap.containsCard(request.getId()))
         {
-            Card card = synchonizedMap.getCard(request.getId());
+            Card card = synchronizedMap.getCard(request.getId());
             if(card.getCode() == request.getCode())
             {
                 access = true;
@@ -66,18 +66,18 @@ public class ProcessingRequestForMoney
 
 
 
-    private boolean checkMoney(RequestForMoney request)
+    private boolean checkMoney(RequestForTakeMoney request)
     {
-        return (synchonizedMap.getCard(request.getId()).getMoney() - request.getMoney()) >= 0;
+        return (synchronizedMap.getCard(request.getId()).getMoney() - request.getMoney()) >= 0;
     }
 
-    private void transaction(RequestForMoney request)
+    private void transaction(RequestForTakeMoney request)
     {
-        Card myCard = synchonizedMap.getCard(request.getId());
+        Card myCard = synchronizedMap.getCard(request.getId());
 
         double myMoney = myCard.getMoney() - request.getMoney();
 
-        synchonizedMap.getCard(myCard.getId()).setMoney(myMoney);
+        synchronizedMap.getCard(myCard.getId()).setMoney(myMoney);
 
     }
 }
