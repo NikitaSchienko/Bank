@@ -2,6 +2,8 @@ package requests;
 
 public class Constants
 {
+    public final static String PATH = "C:\\Users\\nish0817\\Desktop\\Портфолио\\Bank\\file\\cards.xml";
+
     public final static Integer PORT = 6665;
     public final static Integer COUNT_CLIENT = 25;
 

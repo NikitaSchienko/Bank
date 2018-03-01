@@ -36,6 +36,22 @@ public class SynchronizedMap
         return mapCard.get(id);
     }
 
+    public synchronized void setCard(Card card)
+    {
+        mapCard.remove(card.getId());
+        operationCardDAO.delete(card.getId());
+
+        mapCard.put(card.getId(),card);
+        operationCardDAO.insert(card);
+    }
+
+    public synchronized void setCardMoney(Card card, double money)
+    {
+        card.setMoney(money);
+        operationCardDAO.delete(card.getId());
+        operationCardDAO.insert(card);
+    }
+
     public synchronized void putCard(BigInteger id, Card card)
     {
         mapCard.put(id,card);

@@ -1,46 +1,47 @@
 package client;
 import com.alibaba.fastjson.JSON;
-import requests.Constants;
-import requests.RequestForTransaction;
-import requests.RequestScore;
+import requests.*;
 
 import java.math.BigInteger;
 import java.net.*;
 import java.io.*;
 
-public class Client
+public class Client<T>
 {
-    public static void main(String[] ar)
+
+    private T request;
+    private Socket socket;
+
+    public Client(T request)
     {
-        int serverPort = 6665; // здесь обязательно нужно указать порт к которому привязывается сервер.
-        //String address = "127.0.0.1"; // это IP-адрес компьютера, где исполняется наша серверная программа.
-        // Здесь указан адрес того самого компьютера где будет исполняться и клиент.
+        this.request = request;
 
         try
         {
+            socket = new Socket("localhost", Constants.PORT);
+            System.out.println(socket.toString() +" - Подключился к серверу");
+        }
+        catch (IOException e)
+        {
+            System.out.println(socket.toString() + " - Не удалось подключиться к серверу");
+            e.printStackTrace();
+        }
+    }
 
-            Socket socket = new Socket("localhost", serverPort); // создаем сокет используя IP-адрес и порт сервера.
-            System.out.println("Подклился к серверу");
 
-            // Берем входной и выходной потоки сокета, теперь можем получать и отсылать данные клиентом.
+    public void execute()
+    {
+        try
+        {
+
             InputStream sin = socket.getInputStream();
             OutputStream sout = socket.getOutputStream();
 
-            // Конвертируем потоки в другой тип, чтоб легче обрабатывать текстовые сообщения.
             DataInputStream in = new DataInputStream(sin);
             DataOutputStream out = new DataOutputStream(sout);
 
 
-            //RequestScore request = new RequestScore(new BigInteger("4215729546565"), 5421, Constants.GET_MONEY);
-            RequestForTransaction request = new RequestForTransaction(
-                    new BigInteger("4215729546565"),
-                    5421,
-                    Constants.TRANSFER_MONEY,
-                    10,
-                    new BigInteger("55456456454454"));
-
             String jsonRequest = JSON.toJSONString(request);
-
 
             System.out.println("Отправляем строку: " + jsonRequest);
             out.writeUTF(jsonRequest);
@@ -53,4 +54,6 @@ public class Client
             x.printStackTrace();
         }
     }
+
+
 }

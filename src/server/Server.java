@@ -29,6 +29,8 @@ public class Server
         }
         catch(Exception x)
         {
+            System.out.println("Server - Произошла ошибка на сервере");
+            System.out.println("Server - Упал :(");
             x.printStackTrace();
         }
     }

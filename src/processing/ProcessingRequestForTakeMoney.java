@@ -33,7 +33,6 @@ public class ProcessingRequestForTakeMoney implements ProcessingRequest
             {
                 response.setCodeException(Constants.NOT_ENOUGH_MONEY);
             }
-
         }
         else
         {
@@ -52,7 +51,7 @@ public class ProcessingRequestForTakeMoney implements ProcessingRequest
         if(synchronizedMap.containsCard(request.getId()))
         {
             Card card = synchronizedMap.getCard(request.getId());
-            if(card.getCode() == request.getCode())
+            if(card.getCode().equals(request.getCode()))
             {
                 access = true;
             }
@@ -77,7 +76,6 @@ public class ProcessingRequestForTakeMoney implements ProcessingRequest
 
         double myMoney = myCard.getMoney() - request.getMoney();
 
-        synchronizedMap.getCard(myCard.getId()).setMoney(myMoney);
-
+        synchronizedMap.setCardMoney(myCard,myMoney);
     }
 }

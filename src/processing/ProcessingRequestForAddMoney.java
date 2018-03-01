@@ -65,7 +65,7 @@ public class ProcessingRequestForAddMoney implements ProcessingRequest
 
         double myMoney = myCard.getMoney() + request.getMoney();
 
-        synchronizedMap.getCard(myCard.getId()).setMoney(myMoney);
+        synchronizedMap.setCardMoney(myCard,myMoney);
 
     }
 }

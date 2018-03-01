@@ -9,7 +9,7 @@ public class RequestForAddMoney
     private int code;
     private double money;
 
-    public RequestForAddMoney(BigInteger id, int type, int code, double money)
+    public RequestForAddMoney(BigInteger id,  int code, int type, double money)
     {
         this.id = id;
         this.type = type;

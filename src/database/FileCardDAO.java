@@ -1,5 +1,7 @@
 package database;
 
+import requests.Constants;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -11,7 +13,7 @@ import java.util.Map;
 
 public class FileCardDAO
 {
-    private final static String PATH = "C:\\Users\\audi0\\Desktop\\Рабочий стол\\Портфолио\\Bank\\file\\cards.xml";
+
 
     private Map<BigInteger,Card> mapCards;
 
@@ -31,7 +33,7 @@ public class FileCardDAO
     {
         try
         {
-            File file = new File(PATH);
+            File file = new File(Constants.PATH);
             JAXBContext jaxbContext = JAXBContext.newInstance(MapCards.class);
 
             Marshaller marshaller = jaxbContext.createMarshaller();
@@ -41,7 +43,7 @@ public class FileCardDAO
             map.setMapCards(mapCards);
 
             marshaller.marshal(map, file);
-            marshaller.marshal(map, System.out);
+            //marshaller.marshal(map, System.out);
 
         } catch (JAXBException e) {
             e.printStackTrace();
@@ -52,7 +54,7 @@ public class FileCardDAO
     {
         try
         {
-            File file = new File(PATH);
+            File file = new File(Constants.PATH);
             JAXBContext jaxbContext = JAXBContext.newInstance(MapCards.class);
 
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();

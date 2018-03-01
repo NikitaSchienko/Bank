@@ -49,10 +49,10 @@ public class ServerThread implements Runnable
             String jsonLine = null;
             while(true)
             {
-                System.out.println("Ожидание информации от клиента");
+                System.out.println("Ожидание информации от клиента - "+ socket.toString());
                 jsonLine = in.readUTF();
 
-                System.out.println("Клиент прислал строку:  " + jsonLine);
+                System.out.println(socket.toString() +" - Клиент прислал строку:  " + jsonLine);
                 JSONObject requestJSON = JSON.parseObject(jsonLine);
                 Response response = identifyTypeRequest(requestJSON);
 
@@ -64,6 +64,7 @@ public class ServerThread implements Runnable
         catch (Exception e)
         {
             System.out.println(e.getMessage());
+            System.out.println(socket.toString() + " - Произошла ошибка");
             System.out.println(socket.toString() + " - Сессия завершена");
         }
         semaphore.release();
@@ -72,56 +73,52 @@ public class ServerThread implements Runnable
 
     private Response identifyTypeRequest(JSONObject requestJSON)
     {
-        System.out.println("Обработка типа");
+        System.out.println("Обработка типа запроса от клиента - " + socket.toString());
         ProcessingRequest processingRequest = null;
 
+        BigInteger id = requestJSON.getBigInteger("id");
+        int code = requestJSON.getInteger("code");
         int type = requestJSON.getInteger("type");
 
         switch (type)
         {
             case 1003:
             {
-                System.out.println("Тип запроса - внести деньги");
-                BigInteger id = requestJSON.getBigInteger("id");
-                int code = requestJSON.getInteger("code");
+                System.out.println(socket.toString()+ " Тип запроса - внести деньги");
                 double money = requestJSON.getDouble("money");
-                RequestForAddMoney requestForAddMoney = new RequestForAddMoney(id, type, code, money);
+                RequestForAddMoney requestForAddMoney = new RequestForAddMoney(id,  code, type, money);
                 processingRequest = new ProcessingRequestForAddMoney(requestForAddMoney, synchronizedMap);
             }
             break;
             case 1001:
             {
-                System.out.println("Тип запроса - проверка счета");
-                BigInteger id = requestJSON.getBigInteger("id");
-                int code = requestJSON.getInteger("code");
+                System.out.println(socket.toString()+ " Тип запроса - проверка счета");
                 RequestScore requestScore = new RequestScore(id,code,type);
                 processingRequest = new ProcessingRequestScore(requestScore, synchronizedMap);
             }
             break;
             case 1002:
             {
-                System.out.println("Тип запроса - получить деньги");
-                BigInteger id = requestJSON.getBigInteger("id");
-                int code = requestJSON.getInteger("code");
+                System.out.println(socket.toString()+ " Тип запроса - получить деньги");
                 double money = requestJSON.getDouble("money");
-                RequestForTakeMoney requestForTakeMoney = new RequestForTakeMoney(id, type, code, money);
+
+                RequestForTakeMoney requestForTakeMoney = new RequestForTakeMoney(id, code, type,  money);
                 processingRequest = new ProcessingRequestForTakeMoney(requestForTakeMoney, synchronizedMap);
             }
             break;
             case 1004:
             {
-                System.out.println("Тип запроса - перевод");
-                BigInteger id = requestJSON.getBigInteger("id");
+                System.out.println(socket.toString()+ " Тип запроса - перевод");
                 BigInteger idRecipient = requestJSON.getBigInteger("idRecipient");
-                int code = requestJSON.getInteger("code");
                 double money = requestJSON.getDouble("money");
+
                 RequestForTransaction requestForTakeMoney = new RequestForTransaction(id,  code, type, money,idRecipient);
                 processingRequest = new ProcessingRequestForTransaction(requestForTakeMoney, synchronizedMap);
             }
             break;
             default:
             {
-                throw new NullPointerException("Неизвестная операция");
+                throw new NullPointerException(socket.toString()+ " Неизвестная операция");
             }
         }
         return processingRequest.createResponse();

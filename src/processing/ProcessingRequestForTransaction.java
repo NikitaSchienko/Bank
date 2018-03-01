@@ -21,7 +21,7 @@ public class ProcessingRequestForTransaction implements ProcessingRequest
     {
         Response response = new Response();
 
-        if(checkAccess(request) && checkCard(request) && checkMoney(request))
+        if(checkAccess(request))
         {
             if(checkCard(request))
             {
@@ -90,7 +90,7 @@ public class ProcessingRequestForTransaction implements ProcessingRequest
         double myMoney = myCard.getMoney() - request.getMoney();
         double moneyRecipient = cardRecipient.getMoney() + request.getMoney();
 
-        synchronizedMap.getCard(myCard.getId()).setMoney(myMoney);
-        synchronizedMap.getCard(cardRecipient.getId()).setMoney(moneyRecipient);
+        synchronizedMap.setCardMoney(myCard,myMoney);
+        synchronizedMap.setCardMoney(cardRecipient,moneyRecipient);
     }
 }
